@@ -18,6 +18,12 @@ def show_welcome_screen(screen):
                                   'resources',
                                   'rm-commando-logo.jpg'))
 
+    # TODO use package_resources
+    pygame.mixer.music.load(join('commandomaths',
+                                  'resources',
+                                  'ateam-theme.ogg'))
+    pygame.mixer.music.play(start=7.8)
+
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -38,5 +44,7 @@ def show_welcome_screen(screen):
         pygame.display.flip()
 
         clock.tick(3)
+
+    pygame.mixer.music.stop()
 
     return True
