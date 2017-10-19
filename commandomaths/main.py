@@ -1,3 +1,4 @@
+import os
 from pkg_resources import get_distribution
 
 import pygame
@@ -11,6 +12,7 @@ def main():
     print('Welcome to Commando Maths Version {}'
           .format(get_distribution("commandomaths").version))
 
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
     pygame.init()
 
     screen = init_screen()

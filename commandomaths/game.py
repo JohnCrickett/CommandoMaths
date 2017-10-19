@@ -2,7 +2,7 @@ import operator
 
 import pygame
 
-from .colours import WHITE
+from .colours import BLACK, WHITE
 
 
 def _next_question():
@@ -15,14 +15,26 @@ def _next_question():
         }
 
 
-def _render_question_on_screen(question, screen):
-    pass
+def _render_question_on_screen(question, font, screen):
+    # render the text question
+    lhs_surface = font.render(str(question['lhs']), True, BLACK)
+    lhs_rect = lhs_surface.get_rect()
+    lhs_rect.center = 100, 300
+    screen.blit(lhs_surface, lhs_rect)
+
+    # render a group of soldiers the size of each part of the question
+    # above the text
+
+    # display the new screen
+    pygame.display.flip()
 
 
 def run_game_loop(screen):
     done = False
 
     clock = pygame.time.Clock()
+
+    font = pygame.font.Font('freesansbold.ttf', 115)
 
     question = _next_question()
 
@@ -37,7 +49,7 @@ def run_game_loop(screen):
         screen.fill(WHITE)
 
         # --- Drawing code should go here
-        _render_question_on_screen(question, screen)
+        _render_question_on_screen(question, font, screen)
 
         pygame.display.flip()
 

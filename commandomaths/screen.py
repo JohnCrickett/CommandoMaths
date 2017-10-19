@@ -2,7 +2,10 @@ import pygame
 
 
 def init_screen():
-    size = width, height = 1280, 800
+    # TODO get screen size and size window based on it
+    # display_info = pygame.display.Info()
+    # print(display_info)
+    size = 1280, 800
 
     screen = pygame.display.set_mode(size)
 

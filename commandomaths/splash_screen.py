@@ -39,8 +39,6 @@ def show_splash_screen(screen):
     width, height = pygame.display.get_surface().get_size()
     splash_screen = SplashScreen(screen, width, height)
 
-
-
     # TODO use package_resources
     pygame.mixer.music.load(join('commandomaths',
                                   'resources',
