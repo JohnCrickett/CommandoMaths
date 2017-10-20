@@ -1,32 +1,72 @@
 import operator
+from os.path import join
 
 import pygame
 
 from .colours import BLACK, WHITE
 
+OPERATORS = \
+    {
+        '+': operator.add,
+        '-': operator.sub,
+        '*': operator.mul,
+        '/': operator.truediv
+    }
+
 
 def _next_question():
+    # TODO question generator
     return \
         {
             'lhs': 1,
             'rhs': 2,
-            'operation': operator.add,
+            'operation': '+',
             'options': [1, 3, 7]
         }
 
 
-def _render_question_on_screen(question, font, screen):
-    # render the text question
-    lhs_surface = font.render(str(question['lhs']), True, BLACK)
-    lhs_rect = lhs_surface.get_rect()
-    lhs_rect.center = 100, 300
-    screen.blit(lhs_surface, lhs_rect)
+class GameScreen:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.Font('freesansbold.ttf', 115)
+        # TODO use package resources
+        self.soldier_image = \
+            pygame.image.load(join('commandomaths',
+                                   'resources',
+                                   'soldier.png'))
 
-    # render a group of soldiers the size of each part of the question
-    # above the text
+    def render_question(self, question):
+        self.screen.fill(WHITE)
 
-    # display the new screen
-    pygame.display.flip()
+        # render the text question
+        self._render_number(question['lhs'], (100, 300))
+        self._render_text(question['operation'], (300, 300))
+        self._render_number(question['rhs'], (500, 300))
+        self._render_text('=', (600, 300))
+        self._render_answers(question['options'], (800, 200))
+        pygame.display.flip()
+
+    def _render_number(self, number, position):
+        self._render_text(str(number), position)
+        x, y = position
+        for i in range(number):
+            x += 70
+            if i % 3:
+                x = position[0]
+                y += 120
+            self._render_soldier((x, y))
+
+    def _render_text(self, text, position):
+        surface = self.font.render(text, True, BLACK)
+        rect = surface.get_rect()
+        rect.center = position
+        self.screen.blit(surface, rect)
+
+    def _render_soldier(self, position):
+        self.screen.blit(self.soldier_image, position)
+
+    def _render_answers(self, options, position):
+        pass
 
 
 def run_game_loop(screen):
@@ -34,7 +74,7 @@ def run_game_loop(screen):
 
     clock = pygame.time.Clock()
 
-    font = pygame.font.Font('freesansbold.ttf', 115)
+    game_screen = GameScreen(screen)
 
     question = _next_question()
 
@@ -42,16 +82,7 @@ def run_game_loop(screen):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-            elif event.type == pygame.KEYDOWN:
-                # any key skips intro
-                done = True
 
-        screen.fill(WHITE)
+        game_screen.render_question(question)
 
-        # --- Drawing code should go here
-        _render_question_on_screen(question, font, screen)
-
-        pygame.display.flip()
-
-        # --- Limit to 20 frames per second
         clock.tick(20)

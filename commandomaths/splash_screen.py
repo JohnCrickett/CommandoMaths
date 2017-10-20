@@ -5,7 +5,7 @@ import pygame
 from .colours import BLACK, WHITE
 
 
-class SplashScreen():
+class SplashScreen:
     def __init__(self, screen, width, height):
         self.screen = screen
         self.font = pygame.font.Font('freesansbold.ttf', 48)
