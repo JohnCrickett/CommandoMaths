@@ -27,7 +27,14 @@ def _next_question():
 
 
 class GameScreen:
-    QUESTION_Y_POSITION = 500
+    QUESTION_Y_POSITION = 600
+    OPTIONS_X_POSITION = 820
+    OPTIONS_TOP_POSITION = 380
+    SOLDIER_X_OFFSET = 70
+    SOLDIER_Y_OFFSET = 120
+    TEXT_Y_OFFSET = 100
+
+    NUM_SOLDIERS_PER_ROW = 3
 
     def __init__(self, screen):
         self.screen = screen
@@ -43,12 +50,16 @@ class GameScreen:
         # render the text question
         self._render_number(question['lhs'],
                             (100, type(self).QUESTION_Y_POSITION))
+        text_y_position = \
+            type(self).QUESTION_Y_POSITION - type(self).TEXT_Y_OFFSET
         self._render_text(question['operation'],
-                          (300, type(self).QUESTION_Y_POSITION))
+                          (300, text_y_position))
         self._render_number(question['rhs'],
                             (500, type(self).QUESTION_Y_POSITION))
-        self._render_text('=', (640, type(self).QUESTION_Y_POSITION))
-        self._render_answers(question['options'], (740, 200))
+        self._render_text('=', (680, text_y_position))
+        self._render_answers(question['options'],
+                             (type(self).OPTIONS_X_POSITION,
+                              type(self).OPTIONS_TOP_POSITION))
         pygame.display.flip()
 
     def _render_number(self, number, position):
@@ -56,10 +67,10 @@ class GameScreen:
         position = position[0] - 60, position[1] - 180
         x, y = position
         for i in range(number):
-            x += 70
-            if i % 3 == 0:
+            x += type(self).SOLDIER_X_OFFSET
+            if i % type(self).NUM_SOLDIERS_PER_ROW == 0:
                 x = position[0]
-                y -= 120
+                y -= type(self).SOLDIER_Y_OFFSET
             self._render_soldier((x, y))
 
     def _render_text(self, text, position):
@@ -67,14 +78,24 @@ class GameScreen:
         rect = surface.get_rect()
         rect.center = position
         self.screen.blit(surface, rect)
-        rect.center = position[0], position[1] - 180
-        self.screen.blit(surface, rect)
+        # rect.center = position[0], position[1] - 180
+        # self.screen.blit(surface, rect)
 
     def _render_soldier(self, position):
         self.screen.blit(self.soldier_image, position)
 
-    def _render_answers(self, options, position):
-        pass
+    def _render_answer_button(self, answer, position):
+        # TODO render button
+        surface = self.font.render(str(answer), True, BLACK)
+        rect = surface.get_rect()
+        rect.center = position
+        self.screen.blit(surface, rect)
+
+    def _render_answers(self, answers, position):
+        x, y = position
+        for i, answer in enumerate(answers):
+            y = position[1] + i * 150
+            self._render_answer_button(answer, (x, y))
 
 
 def run_game_loop(screen):
