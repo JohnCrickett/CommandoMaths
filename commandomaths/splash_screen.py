@@ -1,5 +1,6 @@
 from os.path import join
 
+from pkg_resources import resource_filename
 import pygame
 
 from .colours import BLACK, WHITE
@@ -11,10 +12,10 @@ class SplashScreen:
         self.font = pygame.font.Font('freesansbold.ttf', 48)
         self.width = width
         self.height = height
-        # TODO use package_resources
-        self.logo = pygame.image.load(join('commandomaths',
-                                           'resources',
-                                           'rm-commando-logo.jpg'))
+        self.logo = \
+            pygame.image.load(resource_filename(__name__,
+                                                join('resources',
+                                                     'rm-commando-logo.jpg')))
 
     def render(self):
         self.screen.fill(WHITE)
