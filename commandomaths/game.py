@@ -4,7 +4,7 @@ from os.path import join
 from pkg_resources import resource_filename
 import pygame
 
-from .colours import BLACK, WHITE
+from .colours import BLACK, GREEN, WHITE
 
 OPERATORS = \
     {
@@ -27,12 +27,16 @@ def _next_question():
 
 
 class GameScreen:
-    QUESTION_Y_POSITION = 600
-    OPTIONS_X_POSITION = 820
-    OPTIONS_TOP_POSITION = 380
-    SOLDIER_X_OFFSET = 70
+    QUESTION_X_POSITION = 160
+    QUESTION_Y_POSITION = 520
+    OPTIONS_X_POSITION = QUESTION_X_POSITION + 760
+    OPTIONS_TOP_POSITION = 280
+    SOLDIER_X_OFFSET = 90
     SOLDIER_Y_OFFSET = 120
     TEXT_Y_OFFSET = 100
+    ANSWER_VERTICAL_SEPERATION = 150
+    ANSWER_BUTTON_HEIGHT = 100
+    ANSWER_BUTTON_WIDTH = 180
 
     NUM_SOLDIERS_PER_ROW = 3
 
@@ -47,16 +51,19 @@ class GameScreen:
     def render_question(self, question):
         self.screen.fill(WHITE)
 
-        # render the text question
         self._render_number(question['lhs'],
-                            (100, type(self).QUESTION_Y_POSITION))
+                            (type(self).QUESTION_X_POSITION,
+                             type(self).QUESTION_Y_POSITION))
         text_y_position = \
             type(self).QUESTION_Y_POSITION - type(self).TEXT_Y_OFFSET
         self._render_text(question['operation'],
-                          (300, text_y_position))
+                          (type(self).QUESTION_X_POSITION + 200,
+                           text_y_position))
         self._render_number(question['rhs'],
-                            (500, type(self).QUESTION_Y_POSITION))
-        self._render_text('=', (680, text_y_position))
+                            (type(self).QUESTION_X_POSITION + 400,
+                             type(self).QUESTION_Y_POSITION))
+        self._render_text('=', (type(self).QUESTION_X_POSITION + 580,
+                                text_y_position))
         self._render_answers(question['options'],
                              (type(self).OPTIONS_X_POSITION,
                               type(self).OPTIONS_TOP_POSITION))
@@ -78,14 +85,18 @@ class GameScreen:
         rect = surface.get_rect()
         rect.center = position
         self.screen.blit(surface, rect)
-        # rect.center = position[0], position[1] - 180
-        # self.screen.blit(surface, rect)
 
     def _render_soldier(self, position):
         self.screen.blit(self.soldier_image, position)
 
     def _render_answer_button(self, answer, position):
-        # TODO render button
+        x, y = position
+        x -= type(self).ANSWER_BUTTON_WIDTH / 2
+        y -= type(self).ANSWER_BUTTON_HEIGHT / 2 + 10
+        self.screen.fill(GREEN, pygame.Rect(x,
+                                            y,
+                                            type(self).ANSWER_BUTTON_WIDTH,
+                                            type(self).ANSWER_BUTTON_HEIGHT))
         surface = self.font.render(str(answer), True, BLACK)
         rect = surface.get_rect()
         rect.center = position
@@ -94,7 +105,7 @@ class GameScreen:
     def _render_answers(self, answers, position):
         x, y = position
         for i, answer in enumerate(answers):
-            y = position[1] + i * 150
+            y = position[1] + i * type(self).ANSWER_VERTICAL_SEPERATION
             self._render_answer_button(answer, (x, y))
 
 
