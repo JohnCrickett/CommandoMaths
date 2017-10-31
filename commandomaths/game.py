@@ -1,30 +1,10 @@
-import operator
 from os.path import join
 
 from pkg_resources import resource_filename
 import pygame
 
 from .colours import BLACK, GREEN, WHITE
-
-OPERATORS = \
-    {
-        '+': operator.add,
-        '-': operator.sub,
-        '*': operator.mul,
-        '/': operator.truediv
-    }
-
-
-def _next_question():
-    # TODO question generator
-    return \
-        {
-            'lhs': 1,
-            'rhs': 2,
-            'operation': '+',
-            'options': [1, 3, 7]
-        }
-
+from .questions import generate_question
 
 class GameScreen:
     QUESTION_X_POSITION = 160
@@ -116,7 +96,7 @@ def run_game_loop(screen):
 
     game_screen = GameScreen(screen)
 
-    question = _next_question()
+    question = generate_question()
 
     while not done:
         for event in pygame.event.get():
