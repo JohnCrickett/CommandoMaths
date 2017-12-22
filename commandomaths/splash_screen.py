@@ -12,10 +12,15 @@ class SplashScreen:
         self.font = pygame.font.Font('freesansbold.ttf', 48)
         self.width = width
         self.height = height
-        self.logo = \
-            pygame.image.load(resource_filename(__name__,
-                                                join('resources',
-                                                     'rm-commando-logo.jpg')))
+        # self.logo = \
+        #     pygame.image.load(resource_filename(__name__,
+        #                                         join('resources',
+        #                                              'rm-commando-logo.jpg')))
+
+        path = resource_filename("commandomaths",
+                                 join('resources', 'rm-commando-logo.jpg'))
+        print('Path: {}'.format(path))
+        self.logo = pygame.image.load(path)
 
     def render(self):
         self.screen.fill(WHITE)
